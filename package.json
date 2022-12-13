@@ -1,0 +1,23 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "learing node-js,express or mongoDB etc",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajab-sharif/Natours.git"
+  },
+  "keywords": [],
+  "author": "Shariful islam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajab-sharif/Natours/issues"
+  },
+  "homepage": "https://github.com/ajab-sharif/Natours#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
