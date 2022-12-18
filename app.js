@@ -1,17 +1,23 @@
 // module require
-const exp = require('constants');
 const express = require('express');
+const fs = require('fs');
 
 // app
 const app = express();
-
+// read tours with fs Module
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, "utf-8"));
 // server start 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Hi, i'm listing from PORT ${PORT}..`));
 // Route
-app.get('/', (req, res) => {
+
+/////////// get all tours
+
+app.get('/api/v1/tours', (req, res) => {
     res.status(200).json({
         status: "success",
-        message: 'First Code Run...(hello world)..'
+        result: tours.length,
+        tours: tours
     });
 });
+
