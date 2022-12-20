@@ -98,13 +98,13 @@ const deleteTour = (req, res) => {
         data: null
     })
 }
-////////////////////////////////////-------Router
+////////////////////////////////////-------Route
 /////////////////////////////////////////////////////////
 /*
-////////// router without ID
+////////// route without ID
 app.get('/api/v1/tours', getAllTours);
 app.post('/api/v1/tours', createTour);
-////////// router with ID
+////////// route with ID
 app.get('/api/v1/tours/:id', getTour);
 app.patch('/api/v1/tours/:id', updateTour)
 app.delete('/api/v1/tours/:id', deleteTour);
@@ -113,11 +113,11 @@ app.delete('/api/v1/tours/:id', deleteTour);
 ///////////----------Better Way
 //////////////////
 
-// router without ID
+// route without ID
 app.route('/api/v1/tours')
     .get(getAllTours)
     .post(createTour);
-/////// router with ID
+/////// route with ID
 app.route('/api/v1/tours/:id')
     .get(getTour)
     .patch(updateTour)
