@@ -1,15 +1,19 @@
 // module require
-const { json } = require('express');
 const express = require('express');
 const fs = require('fs');
-
+const morgan = require('morgan');
 // app
 const app = express();
+////////////////////////////////////// midlewere
+/////////////////////////////////////////////////
 // for body reading
 app.use(express.json());
+//// logger
+app.use(morgan('dev'));
 // read tours with fs Module
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, "utf-8"));
-// server start 
+/////////////////////// server start 
+/////////////////////////////
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Hi, i'm listing from PORT ${PORT}..`));
 // Route
@@ -27,7 +31,6 @@ const getAllTours = (req, res) => {
 //////////// creat Tour 
 ////////////////////////////////////
 const createTour = (req, res) => {
-    console.log(req.body);
     const newId = tours[tours.length - 1].id + 1;
     const newTour = Object.assign({ id: newId }, req.body);
     tours.push(newTour)
@@ -44,9 +47,7 @@ const createTour = (req, res) => {
 ////////////////////// get tour
 ////////////////////////////////////////
 const getTour = (req, res) => {
-    console.log(req.params);
     const id = req.params.id * 1;
-    console.log(id);
     const tour = tours.find(el => el.id === id);
     // if (!tour) {
     if (req.params.id * 1 > tours.length) {
@@ -64,7 +65,7 @@ const getTour = (req, res) => {
 /////////////////////////////
 const updateTour = (req, res) => {
     const id = req.params.id * 1;
-    let tour = tours.find(el => el.id === id);
+    // let tour = tours.find(el => el.id === id);
     // if (!tour) {
     if (req.params.id * 1 > tours.length) {
         return res.status(404).json({
