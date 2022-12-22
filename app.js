@@ -17,8 +17,12 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simpl
 /////////////////////////////
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Hi, i'm listing from PORT ${PORT}..`));
-// Route
 
+///*
+///////////////////////////////// Tour Route
+
+
+// Route
 /////////// get all tours
 //////////////////////////////////
 const getAllTours = (req, res) => {
@@ -100,7 +104,57 @@ const deleteTour = (req, res) => {
         data: null
     })
 }
-////////////////////////////////////-------Route
+//  * /
+// /*
+////////////////////////////// get all Users
+///////////////////////////////////////////////
+
+const getAllUsers = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        result: 'users length here...',
+        users: "[all users]"
+    })
+}
+
+////////////////////// get user
+////////////////////////////////////////
+const getUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        data: 'data here'
+    })
+};
+///////////////////////////////// Create User
+////////////////////////////////////////////////////////
+const createUser = (req, res) => {
+    res.status(201).json({
+        status: 'success',
+        message: "your user create success"
+    });
+};
+////////////// update user
+/////////////////////////////
+const updateUser = (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        data: 'update user here ....'
+    })
+};
+
+
+
+////////////// delete tour
+/////////////////////////////
+const deleteUser = (req, res) => {
+    res.status(204).json({
+        status: 'success',
+        data: null
+    })
+};
+//  */ 
+
+////////////////////////////////////-------Route (Tour Route)
 /////////////////////////////////////////////////////////
 /*
 ////////// route without ID
@@ -110,7 +164,7 @@ app.post('/api/v1/tours', createTour);
 app.get('/api/v1/tours/:id', getTour);
 app.patch('/api/v1/tours/:id', updateTour)
 app.delete('/api/v1/tours/:id', deleteTour);
-
+ 
 */
 ///////////----------Better Way
 //////////////////
@@ -124,3 +178,31 @@ app.route('/api/v1/tours/:id')
     .get(getTour)
     .patch(updateTour)
     .delete(deleteTour);
+
+
+////////////////////////////////////-------Route (User Route)
+/////////////////////////////////////////////////////////
+/*
+////////// route without ID
+app.get('/api/v1/users', getAllUsers);
+app.post('/api/v1/users', createUser);
+////////// route with ID
+app.get('/api/v1/users/:id', getUser);
+app.patch('/api/v1/users/:id', updateUser)
+app.delete('/api/v1/users/:id', deleteUser);
+ 
+*/
+///////////----------Better Way
+//////////////////
+
+// route without ID
+app.route('/api/v1/users')
+    .get(getAllUsers)
+    .post(createUser);
+/////// route with ID
+app.route('/api/v1/users/:id')
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser);
+
+
