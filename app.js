@@ -9,8 +9,13 @@ const app = express();
 /////////////////////////////////////////////////
 // for body reading
 app.use(express.json());
-//// logger
+// Route Munting
+const tourRoute = express.Router();
+const userRoute = express.Router();
 app.use(morgan('dev'));
+app.use('/api/v1/tours', tourRoute);
+app.use('/api/v1/users', userRoute);
+//// logger
 // read tours with fs Module
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, "utf-8"));
 /////////////////////// server start 
@@ -152,7 +157,7 @@ const deleteUser = (req, res) => {
         data: null
     })
 };
-//  */ 
+//  */
 
 ////////////////////////////////////-------Route (Tour Route)
 /////////////////////////////////////////////////////////
@@ -166,6 +171,7 @@ app.patch('/api/v1/tours/:id', updateTour)
 app.delete('/api/v1/tours/:id', deleteTour);
  
 */
+/*
 ///////////----------Better Way
 //////////////////
 
@@ -179,6 +185,18 @@ app.route('/api/v1/tours/:id')
     .patch(updateTour)
     .delete(deleteTour);
 
+*/
+/////////////////// - Tour Routes (Munting Routes)
+/////////////////////////////////////
+// route without ID
+tourRoute.route('/')
+    .get(getAllTours)
+    .post(createTour);
+/////// route with ID
+tourRoute.route('/:id')
+    .get(getTour)
+    .patch(updateTour)
+    .delete(deleteTour);
 
 ////////////////////////////////////-------Route (User Route)
 /////////////////////////////////////////////////////////
@@ -192,6 +210,7 @@ app.patch('/api/v1/users/:id', updateUser)
 app.delete('/api/v1/users/:id', deleteUser);
  
 */
+/*
 ///////////----------Better Way
 //////////////////
 
@@ -204,5 +223,16 @@ app.route('/api/v1/users/:id')
     .get(getUser)
     .patch(updateUser)
     .delete(deleteUser);
-
+*/
+/////////////////// - User Routes (Munting Routes)
+/////////////////////////////////////
+// route without ID
+userRoute.route('/')
+    .get(getAllUsers)
+    .post(createUser);
+/////// route with ID
+userRoute.route('/:id')
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser);
 
