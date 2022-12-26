@@ -9,7 +9,11 @@ const userRoute = require('./routes/userRouter');
 const app = express();
 ////////////////////////////////////// midlewere
 //// logger
-app.use(morgan('dev'));
+console.log(process.env.NODE_ENV);
+
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 // for body reading
 app.use(express.json());
 // Route Munting
