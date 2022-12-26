@@ -1,19 +1,13 @@
-// module require
-const express = require('express');
+const express = require(`express`);
 const morgan = require('morgan');
-/////////////////// our modules
-//////////////////////////////////////
 const tourRoute = require('./routes/tourRouter');
 const userRoute = require('./routes/userRouter');
-// app
+
+
 const app = express();
 ////////////////////////////////////// midlewere
 //// logger
-console.log(process.env.NODE_ENV);
-
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
-}
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 // for body reading
 app.use(express.json());
 // Route Munting
