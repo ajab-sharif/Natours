@@ -47,7 +47,7 @@ exports.getTour = async (req, res) => {
 };
 exports.updateTour = async (req, res) => {
     try {
-        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body);
+        await Tour.findByIdAndUpdate(req.params.id, req.body);
         res.status(200).json({
             status: 'success',
             message: 'Your Tour Updated'
@@ -61,7 +61,7 @@ exports.updateTour = async (req, res) => {
 };
 exports.deleteTour = async (req, res) => {
     try {
-        const tour = await Tour.findByIdAndDelete(req.params.id);
+        await Tour.findByIdAndDelete(req.params.id);
         res.status(200).json({
             status: 'success',
             message: 'Your Tour Delated',
