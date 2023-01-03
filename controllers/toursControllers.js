@@ -2,7 +2,22 @@ const Tour = require('../models/tourModel');
 
 exports.getAllTours = async (req, res) => {
     try {
-        const tours = await Tour.find();
+        // Bulid Query 
+        const qureyObj = { ...req.query };
+        const excludeFields = ['page', 'sort', 'limit', 'fields'];
+        excludeFields.forEach(el => delete qureyObj[el]);
+
+        const query = Tour.find(qureyObj);
+        /*
+        const query = Tour.find()
+            .where('duration')
+            .equals(5)
+            .where('difficulty')
+            .equals('easy')
+        */
+        // Execute Query
+        const tours = await query;
+        // Send Response 
         res.status(200).json({
             status: 'success',
             result: tours.length,
