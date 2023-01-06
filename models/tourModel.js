@@ -34,10 +34,10 @@ const tourSchema = new mongoose.Schema({
         type: String,
         require: [true, 'A tour must have a cove image']
     },
-    image: [String],
-    creatAt: {
+    images: [String],
+    createdAt: {
         type: Date,
-        defult: Date.now(),
+        default: Date.now(),
     },
     startDates: [String],
     maxGroupSize: {

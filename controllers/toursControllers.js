@@ -2,12 +2,16 @@ const Tour = require('../models/tourModel');
 
 exports.getAllTours = async (req, res) => {
     try {
+        // 1A) Filtering 
         // Bulid Query 
         const qureyObj = { ...req.query };
         const excludeFields = ['page', 'sort', 'limit', 'fields'];
         excludeFields.forEach(el => delete qureyObj[el]);
 
-        const query = Tour.find(qureyObj);
+        // 2A) Advance Filtering 
+        let queryStr = JSON.stringify(qureyObj);
+        queryStr = queryStr.replace(/\b(lte|lt|gte|gt)\b/g, match => `$${match}`);
+        let query = Tour.find(JSON.parse(queryStr));
         /*
         const query = Tour.find()
             .where('duration')
@@ -15,8 +19,17 @@ exports.getAllTours = async (req, res) => {
             .where('difficulty')
             .equals('easy')
         */
+        // 2) Sorting
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            query = query.sort(sortBy);
+        } else {
+            query = query.sort('- createdAt');
+        }
         // Execute Query
         const tours = await query;
+
+
         // Send Response 
         res.status(200).json({
             status: 'success',
