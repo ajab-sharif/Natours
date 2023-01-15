@@ -1,5 +1,11 @@
 const Tour = require('../models/tourModel');
 
+exports.aliastopTours = async (req, _, next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAvarage,price';
+    req.query.fields = 'name,price,ratingsAvarage,summary,difficulty';
+    next();
+};
 exports.getAllTours = async (req, res) => {
     try {
         // 1A) Filtering 
@@ -36,7 +42,7 @@ exports.getAllTours = async (req, res) => {
             const numTours = await Tour.countDocuments();
             if (skip >= numTours) throw new Error('Document not found');
         }
-
+        console.log(req.query);
         // Execute Query
         const tours = await query;
         // Send Response 
