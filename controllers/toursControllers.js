@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const ApiFeatures = require('../utlis/apiFeatures');
 
 exports.aliastopTours = async (req, _, next) => {
     req.query.limit = '5';
@@ -6,45 +7,16 @@ exports.aliastopTours = async (req, _, next) => {
     req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
     next();
 };
+
 exports.getAllTours = async (req, res) => {
     try {
-        // 1A) Filtering 
-        // Bulid Query 
-        const qureyObj = { ...req.query };
-        const excludeFields = ['page', 'sort', 'limit', 'fields'];
-        excludeFields.forEach(el => delete qureyObj[el]);
-        // 2A) Advance Filtering 
-        let queryStr = JSON.stringify(qureyObj);
-        queryStr = queryStr.replace(/\b(lte|lt|gte|gt)\b/g, match => `$${match}`);
-        let query = Tour.find(JSON.parse(queryStr));
-        // 2) Sorting
-        if (req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ');
-            query = query.sort(sortBy);
-        } else {
-            query = query.sort('-createdAt');
-        }
-        // 3) Fields Limiting
-        if (req.query.fields) {
-            const fields = req.query.fields.split(',').join(' ');
-            query = query.select(fields);
-        } else {
-            query = query.select('-__v');
-        }
-        // 4) Pagination
-        const page = req.query.page * 1 || 1;
-        const limit = req.query.limit * 1 || 100;
-        const skip = (page - 1) * limit;
-
-        query = query.skip(skip).limit(limit);
-
-        if (req.query.page) {
-            const numTours = await Tour.countDocuments();
-            if (skip >= numTours) throw new Error('Document not found');
-        }
-        console.log(req.query);
         // Execute Query
-        const tours = await query;
+        const apiFeatures = new ApiFeatures(Tour.find(), req.query)
+            .filter()
+            .sort()
+            .fieldsLimit()
+            .paginate()
+        const tours = await apiFeatures.query;
         // Send Response 
         res.status(200).json({
             status: 'success',
@@ -54,7 +26,7 @@ exports.getAllTours = async (req, res) => {
     } catch (err) {
         res.status(400).json({
             status: 'failed',
-            message: err
+            message: 'Bad Request!'
         });
     }
 }
