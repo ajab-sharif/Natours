@@ -1,9 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
-const { aliastopTours, getAllTours, createTour, getTour, updateTour, deleteTour } = require('../controllers/toursControllers');
+const { aliastopTours, getAllTours, createTour, getTour, updateTour, deleteTour, getTourStats, getMonthPlan } = require('../controllers/toursControllers');
 
 router.route('/top-5-cheap').get(aliastopTours, getAllTours);
+router.route('/tour-stats').get(getTourStats);
+router.route('/month-plan/:year').get(getMonthPlan);
 router
     .route('/')
     .get(getAllTours)

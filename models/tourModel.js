@@ -40,7 +40,7 @@ const tourSchema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
-    startDates: [String],
+    startDates: [Date],
     maxGroupSize: {
         type: Number,
         require: [true, 'A Tour must have a group size']
