@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const opt = {
+    toJSON: {
+        virtuals: true
+    },
+    toObject: {
+        virtuals: true
+    }
+}
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -56,6 +64,11 @@ const tourSchema = new mongoose.Schema({
     priceDiscount: {
         type: Number
     }
+}, opt);
+
+tourSchema.virtual('dorationWeeks').get(function () {
+    return this.duration / 7;
 });
+
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;
