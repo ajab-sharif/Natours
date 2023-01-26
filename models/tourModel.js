@@ -65,6 +65,10 @@ const tourSchema = new mongoose.Schema({
     },
     priceDiscount: {
         type: Number
+    },
+    secretTour: {
+        type: Boolean,
+        default: false
     }
 }, opt);
 
@@ -85,6 +89,18 @@ tourSchema.post('save', (docs, next) => {
     // console.log(docs);
     next();
 });
+// Query Middleware
+tourSchema.pre(/^find/, function (next) {
+    this.find({ secretTour: { $ne: true } });
+    this.start = Date.now();
+    next();
+});
+tourSchema.post(/^find/, function (docs, next) {
+    // eslint-disable-next-line no-console
+    console.log(`Query took time ${Date.now() - this.start} miliseconds..`);
+    next();
+});
+
 
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;
