@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const validator = require('validator');
 
 const opt = {
     toJSON: {
@@ -16,7 +17,8 @@ const tourSchema = new mongoose.Schema({
         unique: true,
         trim: true,
         maxlength: [40, 'A tour name must have less or equal than 40 characters..'],
-        minlength: [10, 'A tour name must have more or equal than 10 characters..']
+        minlength: [10, 'A tour name must have more or equal than 10 characters..'],
+        // validate: [validator.isAlpha, 'A tour name must only contain characters... '] // not allow space 
     },
     slug: String,
     duration: {
@@ -72,7 +74,14 @@ const tourSchema = new mongoose.Schema({
         default: 0
     },
     priceDiscount: {
-        type: Number
+        type: Number,
+        validate: {
+            validator: function (val) {
+                return val < this.price;
+            },
+            message: ' Discount price ({VALUE}) shold be below regular price'
+        }
+
     },
     secretTour: {
         type: Boolean,
