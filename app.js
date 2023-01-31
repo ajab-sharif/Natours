@@ -12,4 +12,13 @@ app.use(express.json());
 // Route Munting
 app.use('/api/v1/tours', tourRoute);
 app.use('/api/v1/users', userRoute);
+// unhandle route
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'fail',
+        message: `Can't find ${req.originalUrl} on this server!`
+    });
+    next();
+});
+
 module.exports = app;
