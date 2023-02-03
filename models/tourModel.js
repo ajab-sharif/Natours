@@ -13,7 +13,7 @@ const opt = {
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true,
+        required: [true, 'A tour must have a Name'],
         unique: true,
         trim: true,
         maxlength: [40, 'A tour name must have less or equal than 40 characters..'],
@@ -23,12 +23,12 @@ const tourSchema = new mongoose.Schema({
     slug: String,
     duration: {
         type: Number,
-        require: [true, "A Tour must have a Duration"]
+        required: [true, "A Tour must have a Duration "]
     },
     difficulty: {
         type: String,
         trim: true,
-        require: [true, 'A tour Must have a difficulty'],
+        required: [true, 'A tour Must have a difficulty'],
         enum: {
             values: ['easy', 'medium', 'difficult'],
             message: 'Difficulty is either: easy, medium or difficult',
@@ -36,21 +36,21 @@ const tourSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        require: [true, 'A Tour Must have a Price']
+        required: [true, 'A Tour Must have a Price']
     },
     summary: {
         type: String,
         trim: true,
-        require: [true, 'A Tour must have a summary']
+        required: [true, 'A Tour must have a summary']
     },
     description: {
         type: String,
         trim: true,
-        require: [true, 'A Tour must have a discription']
+        required: [true, 'A Tour must have a discription']
     },
     imageCover: {
         type: String,
-        require: [true, 'A tour must have a cove image']
+        required: [true, 'A tour must have a cove image']
     },
     images: [String],
     createdAt: {
@@ -61,7 +61,7 @@ const tourSchema = new mongoose.Schema({
     startDates: [Date],
     maxGroupSize: {
         type: Number,
-        require: [true, 'A Tour must have a group size']
+        required: [true, 'A Tour must have a group size']
     },
     ratingsAverage: {
         type: Number,
