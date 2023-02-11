@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const ApiFeatures = require('../utlis/apiFeatures');
+const AppError = require('../utlis/appError');
 const catchAysnc = require('../utlis/catchAysnc');
 
 exports.aliasTopTours = async (req, _, next) => {
@@ -35,23 +36,32 @@ exports.createTour = catchAysnc(async (req, res, next) => {
 });
 exports.getTour = catchAysnc(async (req, res) => {
     const tour = await Tour.findById(req.params.id);
+    if (!tour) {
+        return new AppError('no tour found with that ID', 404);
+    }
     res.status(200).json({
         status: 'success',
         tour
     })
 });
 exports.updateTour = catchAysnc(async (req, res, next) => {
-    await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
     });
+    if (!tour) {
+        return new AppError('no tour found with that ID', 404);
+    }
     res.status(200).json({
         status: 'success',
         message: 'Your Tour Updated'
     })
 });
 exports.deleteTour = catchAysnc(async (req, res, next) => {
-    await Tour.findByIdAndDelete(req.params.id);
+    const tour = await Tour.findByIdAndDelete(req.params.id);
+    if (!tour) {
+        return new AppError('no tour found with that ID', 404);
+    }
     res.status(200).json({
         status: 'success',
         message: 'Your Tour Delated',
