@@ -127,8 +127,6 @@ tourSchema.pre('aggregate', function (next) {
                 }
             }
         });
-    // eslint-disable-next-line no-console
-    console.log(this.pipeline());
     next();
 })
 
