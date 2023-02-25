@@ -7,7 +7,7 @@ const AppError = require('./utlis/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
-
+console.log(process.env.NODE_ENV);
 ////////////////////////////////////// midlewere
 //// logger
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));

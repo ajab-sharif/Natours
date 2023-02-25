@@ -1,13 +1,18 @@
+
+const AppError = require("../utlis/appError");
+
+const handleCastErrorDB = err => {
+    const message = `invlid ${err.path} : ${err.value}`;
+    return new AppError(message, 400);
+}
 const sendErrDev = (err, res) => {
     res.status(err.statusCode).json({
         status: err.status,
         error: err,
         message: err.message,
         stack: err.stack
-
     });
 };
-
 const sendErrProd = (err, res) => {
     if (err.isOperational) {
         res.status(err.statusCode).json({
@@ -15,7 +20,6 @@ const sendErrProd = (err, res) => {
             message: err.message
         })
     } else {
-        console.error('🔥🔥 ', err);
         res.status(500).json({
             status: 'error',
             message: 'Something went very Wrong!'
@@ -28,6 +32,8 @@ module.exports = (err, req, res, next) => {
     if (process.env.NODE_ENV === 'development') {
         sendErrDev(err, res)
     } else if (process.env.NODE_ENV === 'production') {
-        sendErrProd(err, res);
+        let error = { ...err };
+        if (err.name === 'CastError') error = handleCastErrorDB(error);
+        sendErrProd(error, res);
     }
-};
+};  
