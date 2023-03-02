@@ -14,7 +14,12 @@ mongoose.connect(DB, {
         // eslint-disable-next-line no-console
         console.log('DB connection success..');
     })
-
+// uncaughtException
+process.on('uncaughtException', (err) => {
+    // eslint-disable-next-line no-console
+    console.log(err.name, err.message);
+    process.exit(1);
+});
 const app = require('./app');
 
 const port = process.env.PORT || 1019;
