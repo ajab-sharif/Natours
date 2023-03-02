@@ -11,12 +11,22 @@ mongoose.connect(DB, {
     useUnifiedTopology: true
 })
     .then(() => {
+        // eslint-disable-next-line no-console
         console.log('DB connection success..');
     })
-    .catch(err => console.log(err))
 
 const app = require('./app');
 
 const port = process.env.PORT || 1019;
 // eslint-disable-next-line no-console
-app.listen(port, () => console.log(`Hi, i'm listing from PORT ${port}..`));
+
+// eslint-disable-next-line no-console
+const server = app.listen(port, () => console.log(`Hi, i'm listing from PORT ${port}..`));
+// unhandleRejection
+process.on('unhandledRejection', (err) => {
+    // eslint-disable-next-line no-console
+    console.log(err.name, err.message);
+    server.close(() => {
+        process.exit(1);
+    })
+});
