@@ -1,7 +1,11 @@
 const express = require('express');
+const { getAllUsers, getUser, createUser, updateUser, deleteUser } = require('../controllers/usersController');
+const authController = require('../controllers/authController');
+
 const router = express.Router();
-const { getAllUsers, getUser, createUser, updateUser, deleteUser } = require('./../controllers/usersController');
-const { route } = require('./tourRouter');
+
+router.post('/singup', authController.singup);
+
 // route without ID
 router
     .route('/')
