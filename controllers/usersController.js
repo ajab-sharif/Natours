@@ -1,12 +1,17 @@
 ////////////////////////////// get all Users
+
+const User = require("../models/userModel");
+const catchAysnc = require("../utlis/catchAysnc");
+
 ///////////////////////////////////////////////
-exports.getAllUsers = (req, res) => {
+exports.getAllUsers = catchAysnc(async (req, res) => {
+    const users = await User.find({});
     res.status(200).json({
         status: 'success',
-        result: 'users length here...',
-        users: "[all users]"
+        result: users.length,
+        users
     })
-}
+});
 
 ////////////////////// get user
 ////////////////////////////////////////
