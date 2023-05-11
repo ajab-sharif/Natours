@@ -33,6 +33,7 @@ const userSchema = mongoose.Schema({
             message: "password does't match!"
         }
     },
+    passwordChangeAt: Date,
 });
 // only on save or create a d user
 userSchema.pre('save', async function (next) {
@@ -48,6 +49,14 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.correctPassword = async function (cantidatePassword, password) {
     return await bcrypt.compare(cantidatePassword, password);
 };
+userSchema.methods.changePasswordAfter = function (jwtTimesTemp) {
+    if (this.passwordChangeAt) {
+        const changeTimesTemp = parseInt((this.passwordChangeAt.getTime() / 1000), 10);
+        return jwtTimesTemp < changeTimesTemp;
+    }
+    // false means password not change 
+    return false;
+}
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
