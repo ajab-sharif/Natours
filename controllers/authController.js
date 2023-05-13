@@ -15,6 +15,7 @@ exports.singup = catchAysnc(async (req, res, next) => {
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm,
         passwordChangeAt: req.body.passwordChangeAt,
+        role: req.body.role
     });
 
     const token = signToken(newUser._id);
@@ -65,11 +66,19 @@ exports.protect = catchAysnc(async (req, res, next) => {
     if (!currentUser) {
         return next(new AppError('The user belonging to this token does no longer exist!', 401));
     }
-    console.log(currentUser);
     // check if user change the password after token was the issued 
     if (currentUser.changePasswordAfter(decoded.iat)) {
         return next(new AppError('Your Password Change Recently! please try again!', 401));
     }
     // access protected route
+    req.user = currentUser;
     next();
 });
+exports.restrictTo = function (...roles) {
+    return function (req, res, next) {
+        if (!roles.includes(req.user.role)) {
+            return next(new AppError('You do not have permision to perform this action', 403));
+        }
+        next();
+    }
+};

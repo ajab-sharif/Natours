@@ -34,6 +34,12 @@ const userSchema = mongoose.Schema({
         }
     },
     passwordChangeAt: Date,
+    role: {
+        type: String,
+        enum: ['user', 'admin', 'guide', 'lead-guied'],
+        default: 'user',
+    }
+
 });
 // only on save or create a d user
 userSchema.pre('save', async function (next) {
