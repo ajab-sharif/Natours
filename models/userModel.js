@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 
 const userSchema = mongoose.Schema({
@@ -33,15 +34,16 @@ const userSchema = mongoose.Schema({
             message: "password does't match!"
         }
     },
-    passwordChangeAt: Date,
     role: {
         type: String,
         enum: ['user', 'admin', 'guide', 'lead-guied'],
         default: 'user',
-    }
-
+    },
+    passwordResetToken: String,
+    resetTokenExpire: Date,
+    passwordChangeAt: Date,
 });
-// only on save or create a d user
+// only on save or create a user
 userSchema.pre('save', async function (next) {
     // check password change or not change
     // if passowrd not change than call next();
@@ -52,6 +54,12 @@ userSchema.pre('save', async function (next) {
     this.passwordConfirm = undefined;
     next();
 });
+userSchema.pre('save', function (next) {
+    if (!this.isModified('password') || this.isNew) return next();
+    this.passwordChangeAt = Date.now();
+    next();
+});
+
 userSchema.methods.correctPassword = async function (cantidatePassword, password) {
     return await bcrypt.compare(cantidatePassword, password);
 };
@@ -62,7 +70,17 @@ userSchema.methods.changePasswordAfter = function (jwtTimesTemp) {
     }
     // false means password not change 
     return false;
-}
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+    /// random resetToken created
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    // encrypted resetToken
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.resetTokenExpire = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
+};
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
