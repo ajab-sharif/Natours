@@ -21,6 +21,16 @@ const createSendToken = (user, statusCode, res) => {
     })
 };
 
+const filterObj = (Obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(Obj).forEach(el => {
+        if (allowedFields.includes(el)) {
+            newObj[el] = Obj[el];
+        }
+    });
+    return newObj;
+};
+
 exports.singup = catchAysnc(async (req, res, next) => {
     const newUser = await User.create({
         name: req.body.name,
@@ -144,10 +154,28 @@ exports.updateMyPassword = catchAysnc(async (req, res, next) => {
         return next(new AppError('Current password is incorrect.', 401));
     }
     // 3. if so, update  password
-    console.log('---------------------');
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
     // 4. loged user in, send jwt token
     createSendToken(user, 200, res);
+});
+exports.updateMe = catchAysnc(async (req, res, next) => {
+    // check if user posted Password DATA 
+    if (
+        req.body.password ||
+        req.body.passwordConfirm)
+        return next(new AppError("This route not for password update! Please use /updateMyPassword.", 400));
+    // update data
+    const filteredBody = filterObj(req.body, 'name', 'email');
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, { new: true, runValidators: true });
+    createSendToken(updatedUser, 200, res);
+});
+exports.deleteMe = catchAysnc(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user.id, { active: false });
+
+    res.status(204).json({
+        status: 'deleted',
+        data: null
+    });
 });

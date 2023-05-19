@@ -39,6 +39,11 @@ const userSchema = mongoose.Schema({
         enum: ['user', 'admin', 'guide', 'lead-guied'],
         default: 'user',
     },
+    active: {
+        type: Boolean,
+        default: true,
+        select: false
+    },
     passwordResetToken: String,
     resetTokenExpire: Date,
     passwordChangeAt: Date,
@@ -59,7 +64,10 @@ userSchema.pre('save', function (next) {
     this.passwordChangeAt = Date.now() - 1000;
     next();
 });
-
+userSchema.pre(/^find/, function (next) {
+    this.find({ active: { $ne: false } });
+    next();
+});
 userSchema.methods.correctPassword = async function (cantidatePassword, password) {
     return await bcrypt.compare(cantidatePassword, password);
 };
