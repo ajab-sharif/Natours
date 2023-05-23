@@ -17,7 +17,7 @@ const DB = process.env.DATABASE_URL.replace(/<PASSWORD>/g, process.env.DATABASE_
 
 /// read file 
 const tours = JSON.parse(
-    fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, 'utf-8')
+    fs.readFileSync(`${__dirname}/dev-data/data/tours.json`, 'utf-8')
 );
 const dataDelete = async function () {
     try {

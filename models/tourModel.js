@@ -86,10 +86,33 @@ const tourSchema = new mongoose.Schema({
     secretTour: {
         type: Boolean,
         default: false
-    }
+    },
+    startLocation: {
+        type: {
+            type: String,
+            default: "Point",
+            enum: ['Point']
+        },
+        coordinates: [Number], // lun , lat
+        address: String,
+        description: String
+    },
+    locations: [
+        {
+            type: {
+                type: String,
+                default: "Point",
+                enum: ['Point']
+            },
+            coordinates: [Number], // lun , lat
+            address: String,
+            description: String,
+            day: Number
+        }
+    ]
 }, opt);
 
-tourSchema.virtual('dorationWeeks').get(function () {
+tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
 });
 // DOCUMENT MIDDLEWARE: Runs before .save() or .create();
