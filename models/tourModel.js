@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
+const User = require("./userModel");
 
 const opt = {
     toJSON: {
@@ -109,7 +109,8 @@ const tourSchema = new mongoose.Schema({
             description: String,
             day: Number
         }
-    ]
+    ],
+    guides: Array
 }, opt);
 
 tourSchema.virtual('durationWeeks').get(function () {
@@ -121,12 +122,10 @@ tourSchema.pre('save', function (next) {
     this.slug = slugify(this.name, { lower: true });
     next();
 });
-tourSchema.pre('save', (next) => {
-    // console.log('will save document...');
-    next();
-});
-tourSchema.post('save', (docs, next) => {
-    // console.log(docs);
+
+tourSchema.pre('save', async function (next) {
+    const guidePromises = this.guides.map(async id => await User.findById(id));
+    this.guides = await Promise.all(guidePromises);
     next();
 });
 // Query Middleware
