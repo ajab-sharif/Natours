@@ -10,7 +10,6 @@ const userRoute = require('./routes/userRouter');
 const AppError = require('./utlis/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
-console.log(process.env.NODE_ENV);
 const app = express();
 
 const limiter = rateLimit({
