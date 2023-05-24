@@ -7,6 +7,7 @@ const xssClean = require('xss-clean');
 const hpp = require('hpp');
 const tourRoute = require('./routes/tourRouter');
 const userRoute = require('./routes/userRouter');
+const reviewRoute = require('./routes/reviewRouter');
 const AppError = require('./utlis/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
@@ -45,6 +46,7 @@ app.use(hpp({
 // Route Munting
 app.use('/api/v1/tours', tourRoute);
 app.use('/api/v1/users', userRoute);
+app.use('/api/v1/reviews', reviewRoute);
 // unhandle route
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
