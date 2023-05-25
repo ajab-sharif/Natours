@@ -17,7 +17,7 @@ router
         reviewController.createReview
     );
 */
-router.use('/:tourId/review', reviewRouter);
+router.use('/:tourId/reviews', reviewRouter);
 
 router
     .route('/')
