@@ -2,6 +2,7 @@ const Tour = require('../models/tourModel');
 const ApiFeatures = require('../utlis/apiFeatures');
 const AppError = require('../utlis/appError');
 const catchAysnc = require('../utlis/catchAysnc');
+const factory = require('./handlerFactory');
 
 exports.aliasTopTours = async (req, _, next) => {
     req.query.limit = '5';
@@ -57,17 +58,8 @@ exports.updateTour = catchAysnc(async (req, res, next) => {
         message: 'Your Tour Updated'
     })
 });
-exports.deleteTour = catchAysnc(async (req, res, next) => {
-    const tour = await Tour.findByIdAndDelete(req.params.id);
-    if (!tour) {
-        return next(new AppError(`no tour found with that ID ${req.params.id}`, 404));
-    }
-    res.status(200).json({
-        status: 'success',
-        message: 'Your Tour Delated',
-        tour: null
-    })
-});
+exports.deleteTour = factory.deleteOne(Tour);
+
 exports.getTourStats = catchAysnc(async (req, res, next) => {
     const stats = await Tour.aggregate([
         {

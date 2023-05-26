@@ -1,4 +1,4 @@
-////////////////////////////// get all Users
+const factory = require('./handlerFactory');
 
 const User = require("../models/userModel");
 const catchAysnc = require("../utlis/catchAysnc");
@@ -39,9 +39,4 @@ exports.updateUser = (req, res) => {
 };
 ////////////// delete tour
 /////////////////////////////
-exports.deleteUser = (req, res) => {
-    res.status(204).json({
-        status: 'success',
-        data: null
-    })
-};
+exports.deleteUser = factory.deleteOne(User);
