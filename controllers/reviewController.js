@@ -1,8 +1,8 @@
 const Review = require("../models/reviewModel");
-const catchAsync = require("../utlis/catchAysnc");
 const factory = require('./handlerFactory');
+//const catchAsync = require("../utlis/catchAysnc");
 
-exports.setUseAndTour = (req, res, next) => {
+exports.setUserTourId = (req, res, next) => {
     if (!req.body.tour) req.body.tour = req.params.tourId;
     if (!req.body.user) req.body.user = req.user.id;
     next();
