@@ -1,8 +1,8 @@
 const Tour = require('../models/tourModel');
-const ApiFeatures = require('../utlis/apiFeatures');
-const AppError = require('../utlis/appError');
 const catchAysnc = require('../utlis/catchAysnc');
 const factory = require('./handlerFactory');
+//const AppError = require('../utlis/appError');
+//const ApiFeatures = require('../utlis/apiFeatures');
 
 exports.aliasTopTours = async (req, _, next) => {
     req.query.limit = '5';
@@ -11,22 +11,7 @@ exports.aliasTopTours = async (req, _, next) => {
     next();
 };
 
-exports.getAllTours = catchAysnc(async (req, res, next) => {
-    // Execute Query
-    const apiFeatures = new ApiFeatures(Tour.find(), req.query)
-        .filter()
-        .sort()
-        .fieldsLimit()
-        .paginate()
-    const tours = await apiFeatures.query;
-    // Send Response 
-    res.status(200).json({
-        status: 'success',
-        result: tours.length,
-        tours
-    })
-});
-
+exports.getAllTours = factory.getAll(Tour);
 exports.createTour = factory.createOne(Tour);
 exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.updateTour = factory.updateOne(Tour);
