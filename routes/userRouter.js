@@ -10,13 +10,14 @@ router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 // Protect all routes after this middlewere 
 router.use(authController.protect);
-// 
-router.use(authController.restrictTo('admin'));
 
 router.get('/me', getMe, getUser);
 router.patch('/updateMyPassword', authController.updateMyPassword);
 router.patch('/updateMe', authController.updateMe);
 router.delete('/deleteMe', authController.deleteMe);
+
+//  
+router.use(authController.restrictTo('admin'));
 router
     .route('/')
     .get(getAllUsers)
