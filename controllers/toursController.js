@@ -1,8 +1,9 @@
 const Tour = require('../models/tourModel');
+const AppError = require('../utlis/appError');
 const catchAysnc = require('../utlis/catchAysnc');
 const factory = require('./handlerFactory');
-//const AppError = require('../utlis/appError');
 //const ApiFeatures = require('../utlis/apiFeatures');
+
 
 exports.aliasTopTours = async (req, _, next) => {
     req.query.limit = '5';
@@ -83,5 +84,33 @@ exports.getMonthPlan = catchAysnc(async (req, res) => {
         status: 'success',
         result: plan.length,
         plan
+    });
+});
+
+// route('/tours-within/:distance/center/:latlng/unit/:unit', getToursWithin);
+
+exports.getToursWithin = catchAysnc(async (req, res, next) => {
+    const { distance, latlng, unit } = req.params;
+    const [lat, lng] = latlng.split(',');
+
+    const radius = unit === 'mi' ? distance / 3963.2 : distance / 6388.1;
+
+    if (!lat || !lng) {
+        return next(
+            new AppError("Please provide laitutr and laongitude in the format lat,lng", 400)
+
+        )
+    }
+
+    const tours = await Tour.find({
+        startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+
+    });
+    res.status(200).json({
+        status: 'success',
+        results: tours.length,
+        data: {
+            data: tours
+        }
     });
 });
