@@ -63,6 +63,13 @@ exports.login = catchAysnc(async (req, res, next) => {
     // 3. if everything is ok . sent token to client
     createSendToken(user, 200, res);
 });
+exports.logout = (req, res) => {
+    res.cookie('jwt', 'no-token-here', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    });
+    res.status(200).json({ status: 'success' });
+};
 exports.protect = catchAysnc(async (req, res, next) => {
     // Getting token and check of it's there ?
     let token;
@@ -71,7 +78,10 @@ exports.protect = catchAysnc(async (req, res, next) => {
         req.headers.authorization.startsWith('Bearer')
     ) {
         token = req.headers.authorization.split(' ')[1];
-    };
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt
+    }
+
     if (!token) {
         return next(
             new AppError('You are not login! please login first to visit this site', 401)
@@ -187,3 +197,28 @@ exports.deleteMe = catchAysnc(async (req, res, next) => {
         data: null
     });
 });
+// ONly for render pages. no erros!
+
+exports.isLoggedIn = async (req, res, next) => {
+    if (req.cookies.jwt) {
+        try {
+            // verification token
+            const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
+            //check if user still exists
+            const currentUser = await User.findById(decoded.id);
+            if (!currentUser) {
+                return next();
+            }
+            // check if user change the password after token was the issued 
+            if (currentUser.changePasswordAfter(decoded.iat)) {
+                return next();
+            }
+            // there is a logged in user
+            res.locals.user = currentUser;
+            return next()
+        } catch (err) {
+            return next()
+        }
+    }
+    next();
+};
