@@ -56,11 +56,7 @@ app.use(hpp({
         'price'
     ]
 }));
-// test middlewere 
-app.use((req, res, next) => {
-    //  console.log(req.cookies);
-    next();
-});
+
 // Route Munting
 app.use('/', viewRoute);
 app.use('/api/v1/tours', tourRoute);
