@@ -5,7 +5,8 @@ import { displayMap } from './mapbox';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
-const loginForm = document.querySelector('.form');
+const loginForm = document.querySelector('.form-login');
+const userDataForm = document.querySelector('.form-user-data');
 const logoutEl = document.querySelector('.nav__el--logout');
 // DELEGATION
 if (mapBox) {
@@ -13,10 +14,11 @@ if (mapBox) {
   displayMap(locations);
 };
 if (loginForm) {
-  document.querySelector('.form').addEventListener('submit', e => {
+  document.querySelector('.form-login').addEventListener('submit', e => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    console.log('login');
     login(email, password);
   })
 }
@@ -26,4 +28,10 @@ if (logoutEl) {
     logout();
   })
 }
-console.log('hello world');
+//
+//if (userDataForm) {
+//  document.querySelector('.form-user-data').addEventListener('submit', (e) => {
+//    e.preventDefault();
+//    console.log('update-data');
+//  })
+//}

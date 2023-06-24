@@ -30,33 +30,15 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 // secure Express apps by setting HTTP response headers.
-//app.use(helmet());
-app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            defaultSrc: ["'self'", 'data:', 'blob:'],
-
-            fontSrc: ["'self'", 'https:', 'data:'],
-
-            scriptSrc: ["'self'", 'unsafe-inline'],
-
-            // eslint-disable-next-line no-dupe-keys
-            scriptSrc: ["'self'", 'https://*.cloudflare.com'],
-
-            scriptSrcElem: ["'self'", 'https:', 'https://*.cloudflare.com'],
-
-            styleSrc: ["'self'", 'https:', 'unsafe-inline'],
-
-            connectSrc: ["'self'", 'data', 'https://*.cloudflare.com']
-        },
-    })
-);
+app.use(helmet());
 //  Limit request from same Api 
 app.use('/api', limiter);
 // Development Logging 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 // for body reading from req.body
 app.use(express.json({ limit: '10kb' }));
+// for form data reading
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 // cookie parser for reading cookie 
 app.use(cookieParser());
 // Data sanitize against NOSQL injection

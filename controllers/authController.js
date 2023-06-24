@@ -100,6 +100,7 @@ exports.protect = catchAysnc(async (req, res, next) => {
     }
     // access protected route
     req.user = currentUser;
+    res.locals.user = currentUser;
     next();
 });
 exports.restrictTo = function (...roles) {
