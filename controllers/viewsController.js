@@ -39,6 +39,7 @@ exports.account = (req, res) => {
     title: "Your Account"
   });
 };
+// this work with form tag in html
 exports.updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(req.user.id, {
     name: req.body.name,

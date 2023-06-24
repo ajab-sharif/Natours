@@ -23,7 +23,7 @@ export const login = async (email, password) => {
     showAlert('error', err.response.data.message);
   }
 };
-export const logout = async (req, res) => {
+export const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',

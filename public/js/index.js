@@ -2,6 +2,7 @@
 import '@babel/polyfill';
 import { login, logout } from './login';
 import { displayMap } from './mapbox';
+import { updateSettings } from './updateSettings';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
@@ -28,10 +29,12 @@ if (logoutEl) {
     logout();
   })
 }
-//
-//if (userDataForm) {
-//  document.querySelector('.form-user-data').addEventListener('submit', (e) => {
-//    e.preventDefault();
-//    console.log('update-data');
-//  })
-//}
+
+if (userDataForm) {
+  document.querySelector('.form-user-data').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+    updateSettings(name, email);
+  })
+}
