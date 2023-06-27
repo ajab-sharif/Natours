@@ -37,6 +37,7 @@ exports.getOne = (Model, popOptions) => catchAysnc(async (req, res, next) => {
 });
 
 exports.updateOne = Model => catchAysnc(async (req, res, next) => {
+
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true

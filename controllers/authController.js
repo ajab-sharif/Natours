@@ -46,7 +46,6 @@ exports.singup = catchAysnc(async (req, res, next) => {
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm,
         passwordChangeAt: req.body.passwordChangeAt,
-        role: req.body.role
     });
     createSendToken(newUser, 201, res);
 });
@@ -179,6 +178,8 @@ exports.updateMyPassword = catchAysnc(async (req, res, next) => {
     // 4. loged user in, send jwt token
     createSendToken(user, 200, res);
 });
+// this should have userController file // this code not belong here this code belong UserController 
+
 exports.updateMe = catchAysnc(async (req, res, next) => {
     // check if user posted Password DATA 
     if (
