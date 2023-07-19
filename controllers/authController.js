@@ -176,6 +176,7 @@ exports.updateMyPassword = catchAysnc(async (req, res, next) => {
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
     // 4. loged user in, send jwt token
+
     createSendToken(user, 200, res);
 });
 // this should have userController file // this code not belong here this code belong UserController 
@@ -188,7 +189,11 @@ exports.updateMe = catchAysnc(async (req, res, next) => {
         return next(new AppError("This route not for password update! Please use /updateMyPassword.", 400));
     // update data
     const filteredBody = filterObj(req.body, 'name', 'email');
+
+    if (req.file) filteredBody.photo = req.file.filename;
+
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, { new: true, runValidators: true });
+
     createSendToken(updatedUser, 200, res);
 });
 exports.deleteMe = catchAysnc(async (req, res, next) => {

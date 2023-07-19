@@ -68,5 +68,5 @@ app.all('*', (req, res, next) => {
 });
 // error handling middleware 
 app.use(globalErrorHandler);
-
+console.log('hellow')
 module.exports = app;
