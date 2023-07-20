@@ -14,7 +14,7 @@ exports.deleteOne = Model => catchAysnc(async (req, res, next) => {
 });
 exports.createOne = Model => catchAysnc(async (req, res, next) => {
     const doc = await Model.create(req.body);
-    res.status(201).json({
+    return res.status(201).json({
         status: 'success',
         data: {
             data: doc
@@ -37,7 +37,6 @@ exports.getOne = (Model, popOptions) => catchAysnc(async (req, res, next) => {
 });
 
 exports.updateOne = Model => catchAysnc(async (req, res, next) => {
-
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true

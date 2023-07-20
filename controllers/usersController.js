@@ -3,6 +3,7 @@ const factory = require('./handlerFactory');
 const User = require("../models/userModel");
 const AppError = require('../utlis/appError');
 const sharp = require('sharp');
+const catchAysnc = require('../utlis/catchAysnc');
 
 //const catchAysnc = require("../utlis/catchAysnc");
 exports.getMe = (req, res, next) => {
@@ -36,9 +37,11 @@ const upload = multer({
 
 exports.uploadPhoto = upload.single('photo');
 
-exports.resizeUserPhooto = async (req, res, next) => {
+exports.resizeUserPhooto = catchAysnc(async (req, res, next) => {
     if (!req.file) return next();
+
     req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
     await sharp(req.file.buffer)
         .resize(500, 500)
         .toFormat('jpeg')
@@ -46,7 +49,7 @@ exports.resizeUserPhooto = async (req, res, next) => {
         .toFile(`public/img/users/${req.file.filename}`);
 
     next()
-}
+})
 
 exports.createUser = (req, res) => {
     res.status(500).json({
