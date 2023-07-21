@@ -4,7 +4,8 @@ const { promisify } = require('util');
 const User = require('../models/userModel');
 const AppError = require('../utlis/appError');
 const catchAysnc = require('../utlis/catchAysnc');
-const sendEmail = require('../utlis/email');
+const Email = require('../utlis/email');
+
 
 const cookieOptions = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -44,9 +45,11 @@ exports.singup = catchAysnc(async (req, res, next) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-        passwordChangeAt: req.body.passwordChangeAt,
+        passwordConfirm: req.body.passwordConfirm
     });
+    const url = `'${req.protocol}://${req.get('host')}/me`;
+    console.log(url);
+    await new Email(newUser, url).sendWelcome();
     createSendToken(newUser, 201, res);
 });
 exports.login = catchAysnc(async (req, res, next) => {
@@ -127,11 +130,11 @@ exports.forgotPassword = catchAysnc(async (req, res, next) => {
     const message = `Forgot your password! submit a PATCH request with new password and COMFIRM PASSWORD to:${resetUrl}\n if you did't forget your password ignore this email`
 
     try {
-        await sendEmail({
-            email: user.email,
-            subject: 'Your PASSWORD Reset Token! (valid for 10m)',
-            message
-        })
+        // await sendEmail({
+        //     email: user.email,
+        //     subject: 'Your PASSWORD Reset Token! (valid for 10m)',
+        //     message
+        // })
 
         res.status(200).json({
             status: 'success',
