@@ -127,15 +127,8 @@ exports.forgotPassword = catchAysnc(async (req, res, next) => {
 
     // 3) send  it to user's email
     const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/resetPassword/${resetToken}`
-    const message = `Forgot your password! submit a PATCH request with new password and COMFIRM PASSWORD to:${resetUrl}\n if you did't forget your password ignore this email`
-
     try {
-        // await sendEmail({
-        //     email: user.email,
-        //     subject: 'Your PASSWORD Reset Token! (valid for 10m)',
-        //     message
-        // })
-
+        await new Email(user, resetUrl).sendPasswordReset();
         res.status(200).json({
             status: 'success',
             message: 'Your token sent to email'
