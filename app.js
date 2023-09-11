@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const tourRoute = require('./routes/tourRouter');
 const userRoute = require('./routes/userRouter');
 const reviewRoute = require('./routes/reviewRouter');
+const bookingRoute = require('./routes/bookingRouter');
 const viewRoute = require('./routes/viewRouter');
 const AppError = require('./utlis/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -62,6 +63,7 @@ app.use('/', viewRoute);
 app.use('/api/v1/tours', tourRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/reviews', reviewRoute);
+app.use('/api/v1/booking', bookingRoute);
 // unhandle route
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
