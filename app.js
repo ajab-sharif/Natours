@@ -1,5 +1,6 @@
 const express = require(`express`);
 const morgan = require('morgan');
+// const cors = require('cors');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 const helmet = require("helmet");
@@ -14,7 +15,6 @@ const bookingRoute = require('./routes/bookingRouter');
 const viewRoute = require('./routes/viewRouter');
 const AppError = require('./utlis/appError');
 const globalErrorHandler = require('./controllers/errorController');
-
 const app = express();
 
 
@@ -32,6 +32,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 // secure Express apps by setting HTTP response headers.
 app.use(helmet());
+// cors allows a server to indicate any ORIGINS ( domain,scheme, or port)
+// app.use(cors());
 //  Limit request from same Api 
 app.use('/api', limiter);
 // Development Logging 
@@ -70,5 +72,4 @@ app.all('*', (req, res, next) => {
 });
 // error handling middleware 
 app.use(globalErrorHandler);
-console.log('hellow')
 module.exports = app;
